@@ -1,0 +1,41 @@
+version: '3.9'
+services:
+  backend:
+    build: .
+    ports:
+      - 8000:8000
+    volumes:
+      - ".:/www"
+    depends_on:
+      - db
+    entrypoint: /bin/sh -c "cd /www && composer i && php artisan serve --host=0.0.0.0"
+
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: ambassador
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - "database:/var/lib/mysql"
+    ports:
+      - 33066:3306
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - "redis:/data"
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: 'mailhog'
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  database:
+  redis:

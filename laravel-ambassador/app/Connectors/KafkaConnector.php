@@ -14,6 +14,14 @@ class KafkaConnector implements ConnectorInterface
 
     public function connect(array $config)
     {
+        $producer = Kafka::publishOn(config('kafka.topics')[0])
+            ->withSasl(new Sasl(
+                config('kafka.username'),
+                config('kafka.password'),
+                config('kafka.mechanism'),
+                config('kafka.security_protocol'),
+            ));
+
         $consumer = Kafka::createConsumer(config('kafka.topics'))
             ->withSasl(new Sasl(
                 config('kafka.username'),
@@ -28,6 +36,6 @@ class KafkaConnector implements ConnectorInterface
             })
             ->build();
 
-        return new KafkaQueue($consumer);
+        return new KafkaQueue($consumer, $producer);
     }
 }

@@ -79,9 +79,8 @@ return [
             'sasl_mechanism' => env('KAFKA_MECHANISM'),
             'sasl_username' => env('KAFKA_USERNAME'),
             'sasl_password' => env('KAFKA_PASSWORD'),
-            'sasl_password' => env('KAFKA_PASSWORD'),
             'group_id' => env('KAFKA_GROUP_ID'),
-        ]
+        ],
     ],
 
     /*

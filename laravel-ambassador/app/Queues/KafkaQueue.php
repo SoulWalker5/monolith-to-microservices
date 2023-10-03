@@ -2,17 +2,21 @@
 
 namespace App\Queues;
 
-use Carbon\Exceptions\Exception;
+use Carbon\Exceptions\Exception as CarbonException;
+use Exception;
 use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Queue\Queue;
 use Illuminate\Support\Facades\Log;
 use Junges\Kafka\Contracts\CanConsumeMessages;
+use Junges\Kafka\Contracts\CanProduceMessages;
 use Junges\Kafka\Exceptions\KafkaConsumerException;
+use Junges\Kafka\Message\Message;
 
 class KafkaQueue extends Queue implements QueueContract
 {
     public function __construct(
         protected readonly CanConsumeMessages $consumer,
+        protected readonly CanProduceMessages $producer,
     ) {
     }
 
@@ -23,7 +27,11 @@ class KafkaQueue extends Queue implements QueueContract
 
     public function push($job, $data = '', $queue = null)
     {
-        // TODO: Implement push() method.
+        try {
+            $this->producer->withMessage(new Message(body: serialize($job)))->send();
+        } catch (Exception $e) {
+            Log::error(self::class . ' ' . $e->getMessage());
+        }
     }
 
     public function pushRaw($payload, $queue = null, array $options = [])
@@ -40,7 +48,7 @@ class KafkaQueue extends Queue implements QueueContract
     {
         try {
             $this->consumer->consume();
-        } catch (Exception|KafkaConsumerException $e) {
+        } catch (CarbonException|KafkaConsumerException $e) {
             Log::error(self::class . ' ' . $e->getMessage());
         }
     }

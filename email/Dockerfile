@@ -1,7 +1,28 @@
-FROM php:8.0-fpm-alpine
+FROM php:8.2-fpm-alpine
+
+RUN set -xe \
+    && apk add --no-cache \
+        git
+
+#RUN set -xe \
+#    && apk add --upgrade \
+#        librdkafka-dev
 
 RUN set -xe \
     && docker-php-ext-install pdo pdo_mysql
+
+RUN apk add --no-cache bash make g++ autoconf
+
+RUN git clone https://github.com/edenhill/librdkafka.git \
+    && cd librdkafka \
+    && ./configure \
+    && make && make install \
+    && cd .. \
+    && pecl install rdkafka \
+    && docker-php-ext-enable rdkafka \
+    && rm -rf  librdkafka
+
+RUN apk del bash make g++ autoconf
 
 #
 # Configure user

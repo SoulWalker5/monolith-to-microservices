@@ -6,4 +6,5 @@ chown -R www:www /www
 
 # composer i
 
-php artisan serve --host=0.0.0.0
+# php artisan serve --host=0.0.0.0
+php artisan queue:work

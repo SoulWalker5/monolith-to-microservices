@@ -6,9 +6,11 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Mail\Message;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class OrderCompleted implements ShouldQueue
 {
@@ -26,6 +28,18 @@ class OrderCompleted implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('email microservice ' . self::class . ' ' . serialize($this->data));
+        Log::info('Emails sending');
+
+        Mail::send('admin', ['order' => $this->data], function (Message $message) {
+            $message->subject('An order has been completed');
+            $message->to('admin@admin.com');
+        });
+
+        Mail::send('ambassador', ['order' => $this->data], function (Message $message) {
+            $message->subject('An order has been completed');
+            $message->to($this->data['ambassador_email']);
+        });
+
+        Log::info('Emails sent');
     }
 }

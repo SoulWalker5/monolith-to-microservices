@@ -30,6 +30,9 @@ class ProduceCommand extends Command
     {
         $order = Order::first();
 
-        OrderCompleted::dispatch($order->toArray());
+        OrderCompleted::dispatch($order->toArray() + [
+            'admin_revenue' => $order->admin_revenue,
+            'ambassador_revenue' => $order->ambassador_revenue,
+        ]);
     }
 }

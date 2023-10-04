@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\OrderCompletedEvent;
 use App\Http\Resources\OrderResource;
+use App\Jobs\OrderCompleted;
 use App\Models\Link;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -103,8 +104,11 @@ class OrderController extends Controller
 
         $order->complete = 1;
         $order->save();
-//todo change to kafka event
-//        event(new OrderCompletedEvent($order));
+
+        OrderCompleted::dispatch($order->toArray() + [
+            'admin_revenue' => $order->admin_revenue,
+            'ambassador_revenue' => $order->ambassador_revenue,
+        ]);
 
         return [
             'message' => 'success'

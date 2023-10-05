@@ -61,9 +61,8 @@ return [
      */
     'cache_driver' => env('KAFKA_CACHE_DRIVER', env('CACHE_DRIVER', 'file')),
 
-    'topics' => explode(',', env('KAFKA_TOPICS') ?? ''),
-    'username' => env('KAFKA_USERNAME'),
-    'password' => env('KAFKA_PASSWORD'),
-    'mechanism' => env('KAFKA_MECHANISM'),
-    'security_protocol' => env('KAFKA_SECURITY_PROTOCOL'),
+    'topics' => [
+        'default' => env('KAFKA_QUEUE'),
+        'email' => env('KAFKA_EMAIL_QUEUE'),
+    ]
 ];

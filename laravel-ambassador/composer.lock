@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d7a71852e2f30560a84f0c96f3ebbaf1",
+    "content-hash": "8f103f033239fe88fe52e2c6a1ebd860",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -259,6 +259,51 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.2"
             },
             "time": "2022-10-27T11:44:00+00:00"
+        },
+        {
+            "name": "di-kay/kafka-queue",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SoulWalker5/kafka-queue.git",
+                "reference": "ca73d4ffe89a351d6cbfbb5bf794232bcc22e217"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SoulWalker5/kafka-queue/zipball/ca73d4ffe89a351d6cbfbb5bf794232bcc22e217",
+                "reference": "ca73d4ffe89a351d6cbfbb5bf794232bcc22e217",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^10.0",
+                "mateusjunges/laravel-kafka": "^1.13",
+                "php": "^8.1"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "DiKay\\Kafka\\KafkaServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DiKay\\Kafka\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "kravtsov",
+                    "email": "shrituon@gmail.com"
+                }
+            ],
+            "support": {
+                "source": "https://github.com/SoulWalker5/kafka-queue/tree/main",
+                "issues": "https://github.com/SoulWalker5/kafka-queue/issues"
+            },
+            "time": "2023-10-04T14:28:40+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -7579,16 +7624,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "10.1.6",
+            "version": "10.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "56f33548fe522c8d82da7ff3824b42829d324364"
+                "reference": "355324ca4980b8916c18b9db29f3ef484078f26e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/56f33548fe522c8d82da7ff3824b42829d324364",
-                "reference": "56f33548fe522c8d82da7ff3824b42829d324364",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/355324ca4980b8916c18b9db29f3ef484078f26e",
+                "reference": "355324ca4980b8916c18b9db29f3ef484078f26e",
                 "shasum": ""
             },
             "require": {
@@ -7645,7 +7690,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/10.1.6"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/10.1.7"
             },
             "funding": [
                 {
@@ -7653,7 +7698,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-09-19T04:59:03+00:00"
+            "time": "2023-10-04T15:34:17+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -9395,7 +9440,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "di-kay/kafka-queue": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -266,12 +266,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SoulWalker5/kafka-queue.git",
-                "reference": "ca73d4ffe89a351d6cbfbb5bf794232bcc22e217"
+                "reference": "017774459fce2842ac5f0e128d90377c8add058e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SoulWalker5/kafka-queue/zipball/ca73d4ffe89a351d6cbfbb5bf794232bcc22e217",
-                "reference": "ca73d4ffe89a351d6cbfbb5bf794232bcc22e217",
+                "url": "https://api.github.com/repos/SoulWalker5/kafka-queue/zipball/017774459fce2842ac5f0e128d90377c8add058e",
+                "reference": "017774459fce2842ac5f0e128d90377c8add058e",
                 "shasum": ""
             },
             "require": {
@@ -303,7 +303,7 @@
                 "source": "https://github.com/SoulWalker5/kafka-queue/tree/main",
                 "issues": "https://github.com/SoulWalker5/kafka-queue/issues"
             },
-            "time": "2023-10-04T14:28:40+00:00"
+            "time": "2023-10-06T07:10:00+00:00"
         },
         {
             "name": "doctrine/inflector",

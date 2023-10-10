@@ -52,6 +52,10 @@ class User extends Authenticatable
         'password'
     ];
 
+    protected $casts = [
+        'password' => 'hashed',
+    ];
+
     public function scopeAmbassadors($query)
     {
         return $query->where('is_admin', 0);

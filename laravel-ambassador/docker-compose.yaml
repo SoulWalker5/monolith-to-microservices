@@ -9,6 +9,9 @@ services:
     depends_on:
       - db
     entrypoint: /bin/sh -c "cd /www && composer i && php artisan serve --host=0.0.0.0"
+    networks:
+      - ambassador
+      - users
 
   db:
     image: mysql:8
@@ -21,6 +24,8 @@ services:
       - "database:/var/lib/mysql"
     ports:
       - 33066:3306
+    networks:
+      - ambassador
 
   redis:
     image: redis
@@ -28,7 +33,15 @@ services:
       - 6379:6379
     volumes:
       - "redis:/data"
+    networks:
+      - ambassador
 
 volumes:
   database:
   redis:
+
+networks:
+  ambassador:
+    name: laravel-ambassador_default
+  users:
+    name: users_default

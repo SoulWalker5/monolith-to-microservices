@@ -1,14 +1,16 @@
 version: '3.9'
 services:
   users_backend:
+    container_name: users_backend
     build: .
-    ports:
-      - 8001:8000
     volumes:
       - ".:/www"
     depends_on:
       - users_db
     entrypoint: /bin/sh -c "cd /www && composer i && php artisan serve --host=0.0.0.0"
+    networks:
+      - ambassador
+      - users
 
   users_db:
     image: mysql:8
@@ -19,11 +21,14 @@ services:
       MYSQL_PASSWORD: root
     volumes:
       - "database:/var/lib/mysql"
+    networks:
+      - users
 
 volumes:
   database:
 
 networks:
-  default:
-    external:
-      name: laravel-ambassador_default
+  ambassador:
+    name: laravel-ambassador_default
+  users:
+    name: users_default

@@ -24,8 +24,20 @@ abstract class ApiService
     }
 
     /** @throws RequestException */
+    public function put(string $path, SendAsEnum $as = SendAsEnum::Json, array $body = [], array $headers = [])
+    {
+        return $this->request(MethodEnum::Put->value, $path, $as->value, $body, $headers);
+    }
+
+    /** @throws RequestException */
+    public function delete(string $path, SendAsEnum $as = SendAsEnum::Json, array $body = [], array $headers = [])
+    {
+        return $this->request(MethodEnum::Delete->value, $path, $as->value, $body, $headers);
+    }
+
+    /** @throws RequestException */
     private function request(string $method, string $path, string $as, array $data = [], array $headers = [])
     {
-        return Http::withHeaders($headers)->$as()->$method("$this->endpoint/$path", $data)->throw();
+        return Http::acceptJson()->withHeaders($headers)->$as()->$method("$this->endpoint/$path", $data)->throw();
     }
 }

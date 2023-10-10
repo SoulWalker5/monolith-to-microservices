@@ -29,26 +29,13 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        if (!\Auth::attempt($request->only('email', 'password'))) {
-            return response([
-                'error' => 'invalid credentials'
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        $scope = $request->path() ? 'admin' : 'ambassador';
 
-        $user = \Auth::user();
+        $data = $request->only(['email', 'password']) + compact('scope');
 
-        $adminLogin = $request->path() === 'api/admin/login';
+        $response = $this->userService->post('login', $data);
 
-        if ($adminLogin && !$user->is_admin) {
-            return response([
-                'error' => 'Access Denied!'
-            ], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $scope = $adminLogin ? 'admin' : 'ambassador';
-        $jwt = $user->createToken('token', [$scope])->plainTextToken;
-
-        $cookie = cookie('jwt', $jwt, 60 * 24); // 1 day
+        $cookie = cookie('jwt', $response['jwt'], 60 * 24); // 1 day
 
         return response([
             'message' => 'success'

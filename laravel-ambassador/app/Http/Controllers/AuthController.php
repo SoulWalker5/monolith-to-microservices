@@ -8,6 +8,7 @@ use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\UserService;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,18 +23,24 @@ class AuthController extends Controller
         $data = $request->only('first_name', 'last_name', 'email', 'password')
             + ['is_admin' => $request->path() === 'api/admin/register' ? 1 : 0];
 
-        $user = $this->userService->post('register', $data);
+        try {
+            $user = $this->userService->post('register', body: $data);
+        } catch (RequestException $e) {
+            return response($e->getMessage(), $e->getCode());
+        }
 
         return response($user, Response::HTTP_CREATED);
     }
 
     public function login(Request $request)
     {
-        $scope = $request->path() ? 'admin' : 'ambassador';
+        $data = $request->only(['email', 'password']) + ['scope' => $request->path() ? 'admin' : 'ambassador'];
 
-        $data = $request->only(['email', 'password']) + compact('scope');
-
-        $response = $this->userService->post('login', $data);
+        try {
+            $response = $this->userService->post('login', body: $data);
+        } catch (RequestException $e) {
+            return response($e->getMessage(), $e->getCode());
+        }
 
         $cookie = cookie('jwt', $response['jwt'], 60 * 24); // 1 day
 
@@ -44,9 +51,13 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
-        $user = $request->user();
+        $headers = ['Authorization' => 'Bearer ' . $request->cookie('jwt')];
 
-        return new UserResource($user);
+        try {
+            return $this->userService->get('user', headers: $headers);
+        } catch (RequestException $e) {
+            return response($e->response->json(), $e->getCode());
+        }
     }
 
     public function logout()

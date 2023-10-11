@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\UserService;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -14,11 +15,9 @@ class ScopeAmbassadorMiddleware
      * @param \Closure $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, UserService $userService)
     {
-        if (!$request->user()->tokenCan('ambassador')) {
-            abort(401, 'unauthorized');
-        }
+        (new UserService(config('microservices.user')))->get('scope/admin');
 
         return $next($request);
     }

@@ -23,6 +23,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('user', [AuthController::class, 'show'])->name('auth.user');
     Route::resource('user', UserController::class)->only(['update']);
+
+    Route::get('scope/{scope}', [AuthController::class, 'scopeCan'])->name('auth.scope');
 });
 
 Route::get('users', [UserController::class, 'index'])->name('user.index');

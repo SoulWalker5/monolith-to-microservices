@@ -6,7 +6,6 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdateInfoRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Services\UserService;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,11 +21,7 @@ class AuthController extends Controller
         $data = $request->only('first_name', 'last_name', 'email', 'password')
             + ['is_admin' => $request->path() === 'api/admin/register' ? 1 : 0];
 
-        try {
-            $user = $this->userService->post('register', body: $data);
-        } catch (RequestException $e) {
-            return response($e->getMessage(), $e->getCode());
-        }
+        $user = $this->userService->post('register', body: $data);
 
         return response($user, Response::HTTP_CREATED);
     }
@@ -35,72 +30,37 @@ class AuthController extends Controller
     {
         $data = $request->only(['email', 'password']) + ['scope' => $request->path() ? 'admin' : 'ambassador'];
 
-        try {
-            $response = $this->userService->post('login', body: $data);
-        } catch (RequestException $e) {
-            return response($e->response->json(), $e->getCode());
-        }
+        $response = $this->userService->post('login', body: $data);
 
         $cookie = Cookie::make('jwt', $response['jwt'], 60 * 24); // 1 day
 
         return response(['message' => 'success'])->withCookie($cookie);
     }
 
-    public function user(Request $request)
+    public function user()
     {
-        $headers = ['Authorization' => 'Bearer ' . $request->cookie('jwt')];
-
-        try {
-            return $this->userService->get('user', headers: $headers);
-        } catch (RequestException $e) {
-            return response($e->response->json(), $e->getCode());
-        }
+        return $this->userService->get('user');
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        $headers = ['Authorization' => 'Bearer ' . $request->cookie('jwt')];
         $cookie = Cookie::forget('jwt');
 
-        try {
-            $this->userService->post('logout', headers: $headers);
-        } catch (RequestException $e) {
-            return response($e->response->json(), $e->getCode());
-        }
+        $this->userService->post('logout');
 
         return response(['message' => 'success'])->withCookie($cookie);
     }
 
     public function updateInfo(UpdateInfoRequest $request)
     {
-        $headers = ['Authorization' => 'Bearer ' . $request->cookie('jwt')];
-
-        try {
-            $user = $this->userService->put(
-                path: 'user',
-                body: $request->only('first_name', 'last_name', 'email'),
-                headers: $headers
-            );
-        } catch (RequestException $e) {
-            return response($e->response->json(), $e->getCode());
-        }
+        $user = $this->userService->put('user', body: $request->only('first_name', 'last_name', 'email'));
 
         return response($user, Response::HTTP_ACCEPTED);
     }
 
     public function updatePassword(UpdatePasswordRequest $request)
     {
-        $headers = ['Authorization' => 'Bearer ' . $request->cookie('jwt')];
-
-        try {
-            $user = $this->userService->put(
-                path: 'user',
-                body: $request->only('password'),
-                headers: $headers
-            );
-        } catch (RequestException $e) {
-            return response($e->response->json(), $e->getCode());
-        }
+        $user = $this->userService->put('user', body: $request->only('password'));
 
         return response($user, Response::HTTP_ACCEPTED);
     }

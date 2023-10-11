@@ -5,11 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Resources\LinkResource;
 use App\Models\Link;
 use App\Models\LinkProduct;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class LinkController extends Controller
 {
+    public function __construct(public readonly UserService $userService)
+    {
+    }
+
     public function index($id)
     {
         $links = Link::with('orders')->where('user_id', $id)->get();
@@ -19,8 +24,10 @@ class LinkController extends Controller
 
     public function store(Request $request)
     {
+        $user = $this->userService->get('user');
+
         $link = Link::create([
-            'user_id' => $request->user()->id,
+            'user_id' => $user['id'],
             'code' => Str::random(6)
         ]);
 
@@ -34,8 +41,14 @@ class LinkController extends Controller
         return $link;
     }
 
-    public function show($code)
+    public function show(Request $request, $code)
     {
-        return Link::with('user', 'products')->where('code', $code)->first();
+        $link = Link::with('products')->where('code', $code)->first();
+
+        $user = $this->userService->get('user/' . $link->user_id);
+
+        $link['user'] = $user;
+
+        return $link;
     }
 }

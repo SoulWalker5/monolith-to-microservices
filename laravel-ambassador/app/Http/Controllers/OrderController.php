@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\OrderCompletedEvent;
 use App\Http\Resources\OrderResource;
 use App\Jobs\OrderCompleted;
 use App\Models\Link;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Services\UserService;
 use Cartalyst\Stripe\Stripe;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    public function __construct(public readonly UserService $userService)
+    {
+    }
+
     public function index()
     {
         return OrderResource::collection(Order::with('orderItems')->get());
@@ -25,14 +29,16 @@ class OrderController extends Controller
             abort(400, 'Invalid code');
         }
 
+        $user = $this->userService->get('user/' . $link->user_id);
+
         try {
             \DB::beginTransaction();
 
             $order = new Order();
 
             $order->code = $link->code;
-            $order->user_id = $link->user->id;
-            $order->ambassador_email = $link->user->email;
+            $order->user_id = $user['id'];
+            $order->ambassador_email = $user['email'];
             $order->first_name = $request->input('first_name');
             $order->last_name = $request->input('last_name');
             $order->email = $request->input('email');

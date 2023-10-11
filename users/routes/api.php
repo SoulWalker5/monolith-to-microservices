@@ -21,6 +21,9 @@ Route::post('login', [AuthController::class, 'login'])->name('auth.login');
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-    Route::get('user', [UserController::class, 'show'])->name('user.show');
-    Route::put('user', [UserController::class, 'update'])->name('user.update');
+    Route::get('user', [AuthController::class, 'show'])->name('auth.user');
+    Route::resource('user', UserController::class)->only(['update']);
 });
+
+Route::get('users', [UserController::class, 'index'])->name('user.index');
+Route::resource('user', UserController::class)->only(['show']);

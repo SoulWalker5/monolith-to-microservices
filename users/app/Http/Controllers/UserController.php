@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -12,28 +13,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return User::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show(User $user)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show(Request $request)
-    {
-        return $request->user();
+        return $user;
     }
 
     public function update(Request $request)
@@ -43,13 +28,5 @@ class UserController extends Controller
         $user->update($request->only('first_name', 'last_name', 'email', 'password'));
 
         return response($user, Response::HTTP_ACCEPTED);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

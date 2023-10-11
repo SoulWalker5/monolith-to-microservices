@@ -37,4 +37,9 @@ class AuthController extends Controller
 
         return response(['message' => 'success']);
     }
+
+    public function show(Request $request)
+    {
+        return $request->user();
+    }
 }

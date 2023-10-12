@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  checkout_backend:
+    build: .
+    ports:
+      - "8002:8000"
+    volumes:
+      - ".:/www"
+    depends_on:
+      - checkout_db
+    entrypoint: /bin/sh -c "cd /www && composer i && php artisan serve --host=0.0.0.0"
+    networks:
+      - checkout
+      - users
+
+  checkout_db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: checkout
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - "database:/var/lib/mysql"
+    networks:
+      - checkout
+
+
+volumes:
+  database:
+  redis:
+
+networks:
+  users:
+    name: users_default
+  checkout:

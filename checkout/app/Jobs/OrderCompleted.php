@@ -26,6 +26,5 @@ class OrderCompleted implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('message from checkout ' . self::class, ' ' . serialize($this->data));
     }
 }

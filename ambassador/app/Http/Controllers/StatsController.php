@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Link;
 use App\Models\Order;
-use App\Services\UserService;
+use DiKay\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 

@@ -110,6 +110,11 @@ class OrderController extends Controller
             'ambassador_revenue' => $order->ambassador_revenue,
         ])->onQueue(config('kafka.topics.email'));
 
+        OrderCompleted::dispatch($order->toArray() + [
+            'admin_revenue' => $order->admin_revenue,
+            'ambassador_revenue' => $order->ambassador_revenue,
+        ])->onQueue(config('kafka.topics.ambassador'));
+
         return [
             'message' => 'success'
         ];

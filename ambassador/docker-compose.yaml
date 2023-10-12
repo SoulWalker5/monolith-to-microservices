@@ -1,0 +1,59 @@
+version: '3.9'
+services:
+  ambassador_backend:
+    build: .
+    ports:
+      - "8003:8000"
+    volumes:
+      - ".:/www"
+    depends_on:
+      - ambassador_db
+    entrypoint: /bin/sh -c "cd /www && composer i && php artisan serve --host=0.0.0.0"
+    networks:
+      - default
+      - users
+      - ambassador
+
+  ambassador_db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: ambassador
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - "database:/var/lib/mysql"
+    networks:
+      - default
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - "redis:/data"
+    networks:
+      - default
+
+  ambassador_queue:
+    build: .
+    environment:
+      CACHE_DRIVER: file
+    depends_on:
+      - ambassador_db
+    volumes:
+      - ".:/www"
+    entrypoint: /bin/sh -c "cd /www && php artisan queue:work"
+    networks:
+      - default
+
+volumes:
+  database:
+  redis:
+
+networks:
+  users:
+    name: users_default
+  ambassador:
+    name: laravel-ambassador_default
+  default:

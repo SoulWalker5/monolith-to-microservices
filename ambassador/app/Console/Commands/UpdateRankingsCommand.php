@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Order;
-use App\Services\UserService;
+use DiKay\UserService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 
@@ -22,8 +22,7 @@ class UpdateRankingsCommand extends Command
         $bar->start();
 
         $ambassadors->each(function ($user) use ($bar) {
-            $orders = Order::where('user_id', $user->id)->get();
-            $revenue = $orders->sum(fn(Order $order) => $order->ambassador_revenue);
+            $revenue = Order::where('user_id', $user->id)->sum('total');
 
             Redis::zadd('rankings', (int)$revenue, $user->first_name . ' ' . $user->last_name);
 

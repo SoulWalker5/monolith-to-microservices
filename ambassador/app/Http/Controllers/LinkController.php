@@ -30,7 +30,7 @@ class LinkController extends Controller
             $linkProducts[] = LinkProduct::create([
                 'link_id' => $link->id,
                 'product_id' => $product_id
-            ]);
+            ])->toArray();
         }
 
         $data = $link->toArray() + ['linkProducts' => $linkProducts];

@@ -26,7 +26,6 @@ Route::prefix('ambassador')->group(function () {
     Route::get('products/frontend', [ProductController::class, 'frontend']);
     Route::get('products/backend', [ProductController::class, 'backend']);
 
-
     Route::middleware(['scope.ambassador'])->group(function () {
         Route::get('user', [AuthController::class, 'user']);
         Route::post('logout', [AuthController::class, 'logout']);

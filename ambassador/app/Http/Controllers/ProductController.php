@@ -18,7 +18,7 @@ class ProductController extends Controller
 
         $products = Product::all();
 
-        \Cache::set('products_frontend', $products, 30 * 60); //30 min
+        Cache::set('products_frontend', $products, 30 * 60); //30 min
 
         return $products;
     }

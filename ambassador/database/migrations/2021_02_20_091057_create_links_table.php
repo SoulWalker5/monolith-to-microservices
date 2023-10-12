@@ -14,7 +14,7 @@ class CreateLinksTable extends Migration
     public function up()
     {
         Schema::create('links', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
+            $table->id();
             $table->string('code')->unique();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

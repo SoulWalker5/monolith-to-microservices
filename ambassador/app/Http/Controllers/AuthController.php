@@ -41,7 +41,7 @@ class AuthController extends Controller
     {
         $user = $this->userService->get('user');
 
-        $user['revenue'] = Order::where('user_id', $user['id'])->sum('total');
+        $user->revenue = Order::where('user_id', $user['id'])->sum('total');
 
         return $user;
     }

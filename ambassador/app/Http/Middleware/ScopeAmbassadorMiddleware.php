@@ -15,9 +15,9 @@ class ScopeAmbassadorMiddleware
      * @param \Closure $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, UserService $userService)
+    public function handle(Request $request, Closure $next)
     {
-        (new UserService(config('microservices.user')))->get('scope/admin');
+        (new UserService(config('microservices.user')))->get('scope/ambassador');
 
         return $next($request);
     }

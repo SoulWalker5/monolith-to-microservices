@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use DiKay\UserService;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(UserService::class, function () {
+            return new UserService(config('microservices.user'));
+        });
     }
 
     /**
@@ -19,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        JsonResource::withoutWrapping();
     }
 }

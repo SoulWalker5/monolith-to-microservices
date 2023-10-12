@@ -105,18 +105,16 @@ class OrderController extends Controller
         $order->complete = 1;
         $order->save();
 
-        OrderCompleted::dispatch($order->toArray() + [
+        $data = $order->toArray() + [
             'admin_revenue' => $order->admin_revenue,
             'ambassador_revenue' => $order->ambassador_revenue,
-        ])->onQueue(config('kafka.topics.email'));
-
-        OrderCompleted::dispatch($order->toArray() + [
-            'admin_revenue' => $order->admin_revenue,
-            'ambassador_revenue' => $order->ambassador_revenue,
-        ])->onQueue(config('kafka.topics.ambassador'));
-
-        return [
-            'message' => 'success'
+            'order_items' => $order->orderItems->toArray(),
         ];
+
+        OrderCompleted::dispatch($data)->onQueue(config('kafka.topics.email'));
+        OrderCompleted::dispatch($data)->onQueue(config('kafka.topics.ambassador'));
+        OrderCompleted::dispatch($data)->onQueue(config('kafka.topics.admin'));
+
+        return ['message' => 'success'];
     }
 }

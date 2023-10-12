@@ -1,0 +1,47 @@
+version: '3.9'
+services:
+  admin_backend:
+    build: .
+    ports:
+      - "8004:8000"
+    volumes:
+      - ".:/www"
+    depends_on:
+      - admin_db
+    entrypoint: /bin/sh -c "cd /www && composer i && php artisan serve --host=0.0.0.0"
+    networks:
+      - default
+      - users
+      - ambassador
+
+  admin_db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: ambassador
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - "database:/var/lib/mysql"
+    networks:
+      - default
+
+  admin_queue:
+    build: .
+    depends_on:
+      - admin_db
+    volumes:
+      - ".:/www"
+    entrypoint: /bin/sh -c "cd /www && php artisan queue:work"
+    networks:
+      - default
+
+volumes:
+  database:
+
+networks:
+  users:
+    name: users_default
+  ambassador:
+    name: laravel-ambassador_default
+  default:

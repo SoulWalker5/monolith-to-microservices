@@ -65,6 +65,6 @@ return [
         'default' => env('KAFKA_QUEUE'),
         'email' => env('KAFKA_EMAIL_QUEUE'),
         'checkout' => env('KAFKA_CHECKOUT_QUEUE'),
-        'admin' => env('KAFKA_ADMIN_QUEUE'),
+        'ambassador' => env('KAFKA_AMBASSADOR_QUEUE'),
     ]
 ];

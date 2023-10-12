@@ -33,8 +33,10 @@ class LinkController extends Controller
             ]);
         }
 
-        LinkCreated::dispatch($link->toArray() + ['linkProducts' => $linkProducts])
-            ->onQueue(config('kafka.topics.checkout'));
+        $data = $link->toArray() + ['linkProducts' => $linkProducts];
+
+        LinkCreated::dispatch($data)->onQueue(config('kafka.topics.checkout'));
+        LinkCreated::dispatch($data)->onQueue(config('kafka.topics.admin'));
 
         return $link;
     }

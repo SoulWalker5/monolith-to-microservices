@@ -14,6 +14,16 @@ services:
       - users
       - ambassador
 
+  checkout_queue:
+    build: .
+    depends_on:
+      - checkout_db
+    volumes:
+      - ".:/www"
+    entrypoint: /bin/sh -c "cd /www && php artisan queue:work"
+    networks:
+      - default
+
   checkout_db:
     image: mysql:8
     restart: always

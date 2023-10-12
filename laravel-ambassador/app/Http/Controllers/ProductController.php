@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ProductUpdatedEvent;
+use App\Jobs\ProductCreated;
+use App\Jobs\ProductDeleted;
+use App\Jobs\ProductUpdated;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -20,7 +22,7 @@ class ProductController extends Controller
     {
         $product = Product::create($request->only('title', 'description', 'image', 'price'));
 
-        event(new ProductUpdatedEvent);
+        ProductCreated::dispatch($product->toArray())->onQueue(config('kafka.topics.checkout'));
 
         return response($product, Response::HTTP_CREATED);
     }
@@ -34,7 +36,7 @@ class ProductController extends Controller
     {
         $product->update($request->only('title', 'description', 'image', 'price'));
 
-        event(new ProductUpdatedEvent);
+        ProductUpdated::dispatch($product->toArray())->onQueue(config('kafka.topics.checkout'));
 
         return response($product, Response::HTTP_ACCEPTED);
     }
@@ -43,7 +45,7 @@ class ProductController extends Controller
     {
         $product->delete();
 
-        event(new ProductUpdatedEvent);
+        ProductDeleted::dispatch(['id' => $product->id])->onQueue(config('kafka.topics.checkout'));
 
         return response(null, Response::HTTP_NO_CONTENT);
     }

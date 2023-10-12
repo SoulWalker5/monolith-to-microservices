@@ -2,9 +2,15 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
+        "di-kay/kafka-queue": "dev-main",
+        "di-kay/user-service": "dev-main",
+        "cartalyst/stripe": "^2.4",
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
@@ -27,6 +33,16 @@
             "Database\\Seeders\\": "database/seeders/"
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/SoulWalker5/kafka-queue.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/SoulWalker5/user-service.git"
+        }
+    ],
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"

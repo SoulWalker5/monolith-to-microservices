@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\LinkResource;
+use App\Jobs\LinkCreated;
 use App\Models\Link;
 use App\Models\LinkProduct;
 use App\Services\UserService;
@@ -31,23 +32,17 @@ class LinkController extends Controller
             'code' => Str::random(6)
         ]);
 
+        $linkProducts = [];
+
         foreach ($request->input('products') as $product_id) {
-            LinkProduct::create([
+            $linkProducts[] = LinkProduct::create([
                 'link_id' => $link->id,
                 'product_id' => $product_id
             ]);
         }
 
-        return $link;
-    }
-
-    public function show(Request $request, $code)
-    {
-        $link = Link::with('products')->where('code', $code)->first();
-
-        $user = $this->userService->get('user/' . $link->user_id);
-
-        $link['user'] = $user;
+        LinkCreated::dispatch($link->toArray() + ['linkProducts' => $linkProducts])
+            ->onQueue(config('kafka.topics.checkout'));
 
         return $link;
     }

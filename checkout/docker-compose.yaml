@@ -10,8 +10,9 @@ services:
       - checkout_db
     entrypoint: /bin/sh -c "cd /www && composer i && php artisan serve --host=0.0.0.0"
     networks:
-      - checkout
+      - default
       - users
+      - ambassador
 
   checkout_db:
     image: mysql:8
@@ -23,7 +24,7 @@ services:
     volumes:
       - "database:/var/lib/mysql"
     networks:
-      - checkout
+      - default
 
 
 volumes:
@@ -33,4 +34,6 @@ volumes:
 networks:
   users:
     name: users_default
-  checkout:
+  ambassador:
+    name: laravel-ambassador_default
+  default:

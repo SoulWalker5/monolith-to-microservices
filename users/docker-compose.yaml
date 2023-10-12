@@ -10,7 +10,7 @@ services:
     entrypoint: /bin/sh -c "cd /www && composer i && php artisan serve --host=0.0.0.0"
     networks:
       - ambassador
-      - users
+      - default
 
   users_db:
     image: mysql:8
@@ -22,7 +22,7 @@ services:
     volumes:
       - "database:/var/lib/mysql"
     networks:
-      - users
+      - default
 
 volumes:
   database:
@@ -30,5 +30,4 @@ volumes:
 networks:
   ambassador:
     name: laravel-ambassador_default
-  users:
-    name: users_default
+  default:

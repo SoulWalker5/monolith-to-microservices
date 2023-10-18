@@ -26,9 +26,15 @@ spec:
             - name: DB_DATABASE
               value: ambassador
             - name: DB_HOST
-              value: 34.159.44.201
+              valueFrom:
+                secretKeyRef:
+                  name: ambassador-secrets
+                  key: DB_HOST
             - name: DB_PASSWORD
-              value: (dhNIeQ.8xVt^-1\
+              valueFrom:
+                secretKeyRef:
+                  name: ambassador-secrets
+                  key: DB_PASSWORD
             - name: DB_PORT
               value: "3306"
             - name: DB_USERNAME

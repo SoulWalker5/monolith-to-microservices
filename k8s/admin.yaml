@@ -72,7 +72,7 @@ spec:
             - name: QUEUE_CONNECTION
               value: kafka
             - name: USER_MICROSERVICE_HOST
-              value: http://users_backend:8000/api
+              value: users-backend:8001/api
           image: di-kay/admin:0.0.1
           name: admin-backend
           ports:

@@ -75,7 +75,7 @@ spec:
             - name: REDIS_HOST
               value: redis
             - name: USER_MICROSERVICE_HOST
-              value: http://users_backend:8000/api
+              value: users-backend:8001/api
           image: di-kay/ambassador:0.0.1
           name: ambassador-backend
           ports:

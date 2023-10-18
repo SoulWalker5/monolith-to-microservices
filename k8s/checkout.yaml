@@ -69,7 +69,7 @@ spec:
             - name: STRIPE_SECRET
               value: sk_test_51NvEYWI46FFwFAHY0kKaFA8KBybVihTO6tsf3nPgplYfCJbpRYfQU9f4BEIk3O40CX9Hcu6coxdYsbCymPMyuQOT00NLo8t1Lt
             - name: USER_MICROSERVICE_HOST
-              value: http://users_backend:8000/api
+              value: users-backend:8001/api
           image: di-kay/checkout:0.0.1
           name: checkout-backend
           ports:

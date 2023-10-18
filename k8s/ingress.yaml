@@ -10,8 +10,8 @@ spec:
         paths:
           - backend:
               service:
-                name: users-backend
+                name: admin-backend
                 port:
-                  number: 8001
-            path: api/users
+                  number: 8004
+            path: api/admin/*
             pathType: ImplementationSpecific

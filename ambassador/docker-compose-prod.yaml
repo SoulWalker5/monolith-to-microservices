@@ -1,0 +1,60 @@
+version: '3.9'
+services:
+  ambassador_backend:
+    build: .
+    image: di-kay/ambassador:0.0.1
+    ports:
+      - "8003:8000"
+    command: sh -c "php artisan config:cache && php artisan serve --host=0.0.0.0"
+    environment:
+      KAFKA_PARTITION: 1
+      KAFKA_BROKERS: pkc-z1o60.europe-west1.gcp.confluent.cloud:9092
+      KAFKA_USERNAME: DH5TYVGN2OW4OGG5
+      KAFKA_PASSWORD: bshBigTF6B8DDRHLs+OWbEYwyZ39Fp7BfZfHg3f/52BxhSzgVBfTTUGQkO+f+1m5
+      KAFKA_MECHANISM: PLAIN
+      KAFKA_SECURITY_PROTOCOL: SASL_SSL
+      KAFKA_QUEUE: default
+      KAFKA_OFFSET_RESET: latest
+      KAFKA_EMAIL_QUEUE: email
+      KAFKA_CHECKOUT_QUEUE: checkout
+      KAFKA_AMBASSADOR_QUEUE: ambassador
+      QUEUE_CONNECTION: kafka
+      USER_MICROSERVICE_HOST: http://users_backend:8000/api
+      DB_HOST: 34.159.44.201
+      DB_PORT: 3306
+      DB_DATABASE: ambassador
+      DB_USERNAME: root
+      DB_PASSWORD: (dhNIeQ.8xVt^-1\
+      CACHE_DRIVER: redis
+      REDIS_HOST: redis
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+  ambassador_queue:
+    build: .
+    image: di-kay/ambassador:0.0.1
+    environment:
+      KAFKA_PARTITION: 1
+      KAFKA_BROKERS: pkc-z1o60.europe-west1.gcp.confluent.cloud:9092
+      KAFKA_USERNAME: DH5TYVGN2OW4OGG5
+      KAFKA_PASSWORD: bshBigTF6B8DDRHLs+OWbEYwyZ39Fp7BfZfHg3f/52BxhSzgVBfTTUGQkO+f+1m5
+      KAFKA_MECHANISM: PLAIN
+      KAFKA_SECURITY_PROTOCOL: SASL_SSL
+      KAFKA_QUEUE: default
+      KAFKA_OFFSET_RESET: latest
+      KAFKA_EMAIL_QUEUE: email
+      KAFKA_CHECKOUT_QUEUE: checkout
+      KAFKA_AMBASSADOR_QUEUE: ambassador
+      QUEUE_CONNECTION: kafka
+      USER_MICROSERVICE_HOST: http://users_backend:8000/api
+      DB_HOST: 34.159.44.201
+      DB_PORT: 3306
+      DB_DATABASE: ambassador
+      DB_USERNAME: root
+      DB_PASSWORD: (dhNIeQ.8xVt^-1\
+      CACHE_DRIVER: file
+      REDIS_HOST: redis
+    command: sh -c "php artisan config:cache && php artisan queue:work"

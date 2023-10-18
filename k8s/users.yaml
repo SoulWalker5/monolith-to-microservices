@@ -54,7 +54,7 @@ kind: Service
 metadata:
   labels:
     io.kompose.service: users-backend
-  name: users_backend
+  name: users-backend
 spec:
   ports:
     - name: "8001"

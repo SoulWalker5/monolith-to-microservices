@@ -90,7 +90,7 @@ kind: Service
 metadata:
   labels:
     io.kompose.service: admin-backend
-  name: admin_backend
+  name: admin-backend
 spec:
   ports:
     - name: "8004"

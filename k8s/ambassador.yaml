@@ -39,8 +39,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: kafka-secrets
-                  key:
-                    KAFKA_BROKERS
+                  key: KAFKA_BROKERS
             - name: KAFKA_CHECKOUT_QUEUE
               value: checkout
             - name: KAFKA_EMAIL_QUEUE

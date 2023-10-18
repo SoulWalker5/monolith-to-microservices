@@ -17,10 +17,9 @@ spec:
     spec:
       containers:
         - args:
-            - php
-            - artisan
-            - serve
-            - --host=0.0.0.0
+            - sh
+            - -c
+            - php artisan config:cache && php artisan serve --host=0.0.0.0
           env:
             - name: DB_DATABASE
               value: users
@@ -38,7 +37,7 @@ spec:
               value: "3306"
             - name: DB_USERNAME
               value: root
-          image: di-kay/users:0.0.1
+          image: di-kay/users:0.0.2
           name: users-backend
           ports:
             - containerPort: 8000

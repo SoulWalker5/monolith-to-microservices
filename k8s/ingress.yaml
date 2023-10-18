@@ -8,10 +8,17 @@ spec:
   rules:
     - http:
         paths:
-          - backend:
+          - path: /api/admin/*
+            pathType: ImplementationSpecific
+            backend:
               service:
                 name: admin-backend
                 port:
                   number: 8004
-            path: api/admin/*
+          - path: /api/ambassador/*
             pathType: ImplementationSpecific
+            backend:
+              service:
+                name: ambassador-backend
+                port:
+                  number: 8003
